@@ -1,0 +1,30 @@
+Category: Cryptography (717)
+Difficulty: Hard
+Points: 70
+
+I sent a couple of images to my friend, Leslie S. Brown, to edit. 
+The only problem is that she only sent back 1 image! 
+Can you help me figure out what happened to the other image? 
+Also, for whatever reason, the image has a red tinge to it. 
+Image: https://mega.nz/#!nGg2DIxA!zL1BLCoPpRB6KPTBrDqHWXyphBn-SRl1qs_kpcyIS4k
+
+Tools used: zsteg
+
+We get a file named final.png. "Red tinge" may suggest that the author used steganography to hide a message.
+To check, let's use zsteg.
+
+# zsteg -a final.png 
+
+Second line of the output suggests that there is a PNG image at b1,r,lsb,xy.
+We create an empty png file and redirect the output of the extract option there.
+
+# touch answer.png
+# zsteg -E b1,r,lsb,xy final.png > answer.png
+
+Opening the second file, we immediately notice weird colors on the top of it. Could the same tool work?
+
+# zsteg -a answer.png
+
+We notice a suspiciously looking piece of text. 
+b1,r,lsb,xy         .. text: "1_kn3W_tH3_r3D_w4s_0ff"
+That is our flag!

@@ -1,0 +1,43 @@
+Category: Miscellaneous (671)
+Difficulty: Hard
+Points: 80
+
+I think my amazing photo was hit by a mixer and now it is not working. 
+Help me fix it? 
+https://mega.nz/#!Ds0mWaCJ!4uKfJeJwhupG7Tvx8ReTBP1reFgdzRLE3YrN0l-5Jrg 
+hint: visit: https://en.wikipedia.org/wiki/List_of_file_signatures 
+Programming might be useful in this challenge
+
+Tools used: CyberChef, C++ (any programming language will work)
+
+We get a file named fl4g.jpeg. As soon as we open it in a hex editor, we see the header is not what is should be. 
+In the list given, a proper jpeg header is said to be FF D8 FF E0 00 10 4A 46 49 46 00 01
+Header in our file is                                 E0 FF D8 FF 46 4A 10 00 01 00 46 49
+
+Not hard to see that bytes were swapped in 4s. 
+To reverse that, we go to CyberChef, open our file as input, select 'to Hex' (OPTIONS delimiter: none ; bytes per line: 4 ;) <- THIS IS IMPORTANT
+We same output to a file and name it hexed.txt.
+
+Next, we can start reversing. 
+A simple function to do so in C++ is:
+
+void rev4s(){
+        string byt3s;
+        ifstream File; 
+        File.open("hexed.txt");
+        while(getline(File, byt3s)){ //take 4 bytes and reverse
+                for(int i=7; i>0; i-=2){
+                        cout<<byt3s[i-1]<<byt3s[i]<<' ';
+                }
+        }
+        File.close();
+}
+
+We execute it in main() and compile:
+# g++ file_with_code.cpp
+# touch swapped.txt
+# ./a.out > swapped.txt
+
+Then, we open swapped.txt as input in CyberChef, select 'from Hex' and save output as 'flag.jpeg'.
+The file should work and say:
+Flag{byt3_sw4p}

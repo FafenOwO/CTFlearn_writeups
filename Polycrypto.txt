@@ -13,8 +13,6 @@ f = x^206 + x^205 + x^202 + x^201 + x^198 + x^197 + x^195 + x^194 + x^190 + x^18
 Polynomials like this one can be used to represent binary numbers. 
 Mechanically and just for this excercise:
 
-Let's say we have a message saying "CTF", binary representation of it would be 01000011	01010100 01000110.
-
 Each bit of a binary number can be seen as 2^n, where n is natural.
 1    0    1    0
 _    _    _    _      =   1*(2^3) + 0*(2^2) + 1*(2^1) + 0*(2^0)
@@ -26,7 +24,8 @@ x^3 would mean the third bit of a number is 1. (we start from 0, just like with 
 x^3 + x^1 is equal to 1010
 x^3 + x^1 + 1  would be 1011
 
-CTF, 01000011	01010100 01000110, would be:
+Let's say we have a message saying "CTF", binary representation of it would be 01000011	01010100 01000110.
+If we wanted to write that as a polynomial, it would be:
 x^22 + x^17 + x^16 + x^14 + x^12 + x^10 + x^6 + x^2 + x^1
 
 

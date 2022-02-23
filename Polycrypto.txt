@@ -1,0 +1,37 @@
+Category: Cryptography (547)
+Difficulty: Hard
+Points: 70
+
+Polynomials are a very useful branch of mathematics. They can also hide secrets. Can you find what this one is hiding? 
+https://mega.nz/#!mLJXWCIS!ZLpbPEGzhPevFeLGwUv6imuRTl19jiO5q-P7_dVaXoM 
+https://en.wikipedia.org/wiki/Finite_field_arithmetic
+
+We get a text file with the following contents:
+
+f = x^206 + x^205 + x^202 + x^201 + x^198 + x^197 + x^195 + x^194 + x^190 + x^189 + x^184 + x^182 + x^181 + x^178 + x^177 + x^176 + x^174 + x^173 + x^172 + x^171 + x^169 + x^168 + x^166 + x^165 + x^164 + x^157 + x^156 + x^150 + x^149 + x^147 + x^146 + x^142 + x^141 + x^140 + x^139 + x^136 + x^134 + x^133 + x^131 + x^130 + x^129 + x^126 + x^125 + x^123 + x^122 + x^121 + x^120 + x^118 + x^117 + x^115 + x^114 + x^112 + x^109 + x^108 + x^104 + x^102 + x^101 + x^96 + x^94 + x^93 + x^91 + x^90 + x^86 + x^85 + x^84 + x^81 + x^80 + x^78 + x^76 + x^75 + x^74 + x^73 + x^72 + x^69 + x^68 + x^66 + x^62 + x^61 + x^60 + x^57 + x^53 + x^52 + x^49 + x^48 + x^46 + x^44 + x^43 + x^42 + x^41 + x^40 + x^38 + x^37 + x^35 + x^33 + x^32 + x^29 + x^28 + x^21 + x^20 + x^14 + x^13 + x^11 + x^10 + x^6 + x^5 + x^4 + x^3 + x^2 + 1
+
+Polynomials like this one can be used to represent binary numbers. 
+Mechanically and just for this excercise:
+
+Let's say we have a message saying "CTF", binary representation of it would be 01000011	01010100 01000110.
+
+Each bit of a binary number can be seen as 2^n, where n is natural.
+1    0    1    0
+_    _    _    _      =   1*(2^3) + 0*(2^2) + 1*(2^1) + 0*(2^0)
+2^3  2^2  2^1  2^0
+
+It is very similar with polynomials, the exponent represents whether a certain bit is equal 0 or 1.
+x^3 would mean the third bit of a number is 1. (we start from 0, just like with powers of 2)
+
+x^3 + x^1 is equal to 1010
+x^3 + x^1 + 1  would be 1011
+
+CTF, 01000011	01010100 01000110, would be:
+x^22 + x^17 + x^16 + x^14 + x^12 + x^10 + x^6 + x^2 + x^1
+
+
+Coming back to the actual task, our polynomial represents this binary: 
+01100110 01101100 01100001 01100111 01111011 01110000 00110000 01101100 01111001 01101110 01101111 01101101 00110001 01100001 01101100 01110011 01011111 00110100 01110010 00110011 01011111 01101011 00110000 00110000 01101100 01111101
+
+Converting that to ascii gives our flag:
+CTFlearn{p0lynom1als_4r3_k00l}

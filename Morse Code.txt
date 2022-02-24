@@ -1,0 +1,17 @@
+
+Category: Cryptography (309)
+Difficulty: Easy
+Points: 20
+
+..-. .-.. .- --. ... .- -- ..- . .-.. -- --- .-. ... . .. ... -.-. --- --- .-.. -... -.-- - .... . .-- .- -.-- .. .-.. .. -.- . -.-. .... . . ...
+
+Morse code is a way of encoding characters invented by Samuel Morse in 1830s. It uses two different signal durations, dots and dashes.
+https://en.wikipedia.org/wiki/Morse_code
+
+Using International Morse Code to decode characters given:
+..-.  F
+.-..  L
+.-    A
+--.   G
+and so on,
+we get our flag: SAMUELMORSEISCOOLBYTHEWAYILIKECHEES

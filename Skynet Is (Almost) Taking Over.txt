@@ -1,0 +1,27 @@
+Category: Cryptography (221)
+Difficulty: Hard
+Points: 160
+
+Skynet is using a very small list of primes for RSA style encryption purposes. 
+In fact their list is only the size of the smallest odd prime. 
+One of the robots sent a message to three other robots. 
+These are futuristic robots with the ability to use quantum computing and so they don't mind prime factoring huge numbers.
+You can't do that though. Find out what message the robot sent to his friends. 
+Flag is in flag{} format. 
+https://mega.nz/#!7WZg2I5I!UiyBukv8_IjartojnY86nhN5jsQFKE4tPCEF1lPqsQ8
+
+Tools used: RsaCtfTool by Ganapati: https://github.com/Ganapati/RsaCtfTool
+
+As the description states, factoring is not the intended way to solve this challenge.
+But if we use tools (which is pretty tempting), the first n value turns out to be small enough.
+To make the command more readable, numbers were replaced with tags.
+
+# python3 RsaCtfTool.py --uncipher < c1 >  -n < n1 > --attack factordb -e < e >
+
+The flag should be in the output:
+utf-8 : flag{will_he_be_back}
+
+---
+
+The way it was meant to be solved is very likely to be CRT.
+https://www.youtube.com/watch?v=15xcBE7MFBg

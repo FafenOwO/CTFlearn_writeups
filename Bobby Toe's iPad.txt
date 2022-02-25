@@ -1,0 +1,31 @@
+Category: Forensics (320)
+Difficulty: Hard
+Points: 70
+
+Here is a pic of my friend Bobby Toe. while he's happy to give you his iPad, he's not as willing to give you the flag. 
+can you get it from him? here is an image of Bobby Toe: 
+https://mega.nz/#!iWAm2KJL!2uRVDKrHOWryZkZNW6leV0sQMh-b0-AYQksa3i-A3Eg
+
+Tools used: strings, hexed.it (hex editor), binwalk, Aperi'Solve, http://rumkin.com/tools/cipher/otp.php (One Time Pad decryption tool)
+
+Checking the file attacked with
+
+# strings -10 bobbytoesipad.png
+
+...we can see a string: "congrats you found me! you win an iPad!"
+Binwalk doesn't return anything valuable at this point, but if we open the file in a hex editor, we can clearly see a JFIF header.
+If we get rid of that string (which happens to be right before the header), binwalk starts to see the file.
+Now, it is possible to extract using
+
+binwalk -D=".*" bobbytoesipad-edited.png
+
+The image extracted contains a caption: bbbabydonthurtmewhatislove
+After checking, we know it isn't the flag we are looking for. But having a look at this challenge's name, it is very likely to use one time pad encryption.
+
+Both strings and binwalk are useless when it comes to the second image. 
+
+Checking our first file with Aperi'Solve, we see a caption above the character's head: zpv_tigqylhbafmeoesllpms.
+
+Length doesn't match and the second string contains an underscore character, but one time pad's still may be worth cheching.
+CyberChef and boxentriq's tools don't return anything interesting (that works), but rumkin's decryption tool gives the flag:
+you_thinkyougotskillshuh

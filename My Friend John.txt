@@ -1,0 +1,46 @@
+Category: Miscellaneous (1135)
+Difficulty: Easy
+Points: 30
+
+Have you met my friend John?
+
+He's not so scary, even though they call him "The Ripper".
+
+Tools: fcrackzip, rock-you.txt
+
+The challenge has a .zip file attached. Inside, we find the interesting password-protected part. It's very likely to be cracked using John the Reaper tool.
+My personal preference is fcrackzip (just simplier for such files), so let's try that first.
+
+Bruteforcing the file the usual way seems to take ages. Thus, attacking it with a wordlist may be worth trying.
+
+# fcrackzip -v -u -D -p /usr/share/wordlists/rockyou.txt use-rockyou.zip
+
+It quickly outputs the password: kdbs0429
+Using a GUI archive manager (laziness isn't always bad), we extract the file just to find another password-protected .zip and what seems to be a custom wordlist.
+Repeating the previous command with it may work.
+
+# fcrackzip -v -u -D -p custom-list.txt custom-list.zip
+
+Just like before, password is found really quick: 1N73rD3N0M1N4710N41
+And guess what, another .zip file inside.
+Custom wordlist doesn't help, but one we used earlier returns the password in a few second
+
+# fcrackzip -v -u -D -p /usr/share/wordlists/rockyou.txt brute-force-pin.zip
+
+991337
+This .zip included only a text file with out flag.
+
+# cat flag.txt
+
+shows CTFlearn{s0_n0W_y0uv3_M3t_J0hN}
+
+
+----------------
+In Kali Linux, the rockyou.txt wordlist is usually already placed in /usr/share/wordlists.
+If you haven't used it before, go there and extract it. Gunzip should do.
+----------------
+Options used for fcrackzip are:
+-v  | verbose
+-u  | use unzip, gets rid of false possibilities
+-D  | dictionary attack
+-p  | init password string, to select the wordlist

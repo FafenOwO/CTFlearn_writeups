@@ -1,0 +1,35 @@
+Category: Reverse Engineering (990)
+Difficulty: Easy
+Points: 10
+
+Good beginning Reversing challenge - jump into gdb and start looking for the flag!
+
+Tools: gdb
+
+The attached .zip file includes a readme, the program we should break and an encrypted file with source code.
+At first, we want to have a quick view at a disassembled version of this program. 
+
+# gdb -q ./Reykjavik
+  > disassemble main
+  
+ Now, we can say more or less how the code flows. For a neat GUI interface use Cutter.
+ Opening the main function, we see it has a few printf's and puts's. Both those functions are used to print text in the terminal window.
+ Where we want to get is very likely the string 'Congratulation'...
+ Looking at the code, we know that even with a wrong input, we should get to the jne right before it.
+ The lines are:
+  call strcmp       ;this function returns 0 if compared strings are equal
+  mov r12d, eax
+  test eax, eax
+  jne 0x1197
+ We likely should be able to add a breakpoint just between the call and jump, then play with eax register's value.
+ Let's go back to gdb. We'll add one breakpoint where main starts and then the one we'll actually work on.
+  > b * main
+  > b * 0x0000555555555170
+ Now, we check if that is correct.
+  > run CTFlearn{pizza_is_tasty}
+  > ni
+ We run the program till we get to the other break point, then change eax register's value to 0...
+  > set $eax=0
+ ... and run till we get interesting output.
+ 
+"Congratulations, you found the flag!!: 'CTFlearn{Eye_L0ve_Iceland_}'" should be displayed

